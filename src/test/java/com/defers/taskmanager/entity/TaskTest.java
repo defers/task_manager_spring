@@ -8,8 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-
-
 @SpringBootTest
 class TaskTest {
 
