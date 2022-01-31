@@ -24,5 +24,17 @@ class TaskTest {
 
     }
 
+    @Test
+    void shouldCreateClassWithNoArguments() {
+
+        Task task = new Task();
+
+        assertThat(task).isNotNull();
+        assertThat(task.getId()).isNull();
+        assertThat(task.getDescription()).isNull();
+        assertThat(task.getDate()).isNull();
+
+    }
+
 
 }
