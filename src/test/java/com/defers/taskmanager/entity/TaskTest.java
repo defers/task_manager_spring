@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -14,8 +16,9 @@ class TaskTest {
     @Test
     void shouldCreateClassWithAllArguments() {
 
-        Date date = new GregorianCalendar(2022, 01, 15).getTime();
-        Task task = new Task(1L, "some info", date);
+        LocalDateTime date = new Timestamp(
+                new GregorianCalendar(2022, 01, 15).getTime().getTime()).toLocalDateTime();
+        Task task = new Task(1L, "some info", date, new User());
 
         assertThat(task).isNotNull();
         assertThat(task.getId()).isEqualTo(1L);

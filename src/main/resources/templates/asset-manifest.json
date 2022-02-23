@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.8bf86031.css",
+    "main.js": "/static/js/main.3cd95952.js",
+    "index.html": "/index.html",
+    "static/media/videogame-pacman-game-video-svgrepo-com.svg": "/static/media/videogame-pacman-game-video-svgrepo-com.4ade7a35f957aede1c086e9813e90844.svg",
+    "main.8bf86031.css.map": "/static/css/main.8bf86031.css.map",
+    "main.3cd95952.js.map": "/static/js/main.3cd95952.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8bf86031.css",
+    "static/js/main.3cd95952.js"
+  ]
+}

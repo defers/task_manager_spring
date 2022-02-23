@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tasks")
@@ -17,7 +17,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class Task {
 
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -28,6 +27,10 @@ public class Task {
 
     @Column(name = "creation_date")
     @NotBlank
-    private Date date;
+    private LocalDateTime date;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }
