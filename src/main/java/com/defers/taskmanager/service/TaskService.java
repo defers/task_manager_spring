@@ -11,13 +11,13 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
+@Transactional(isolation = Isolation.READ_COMMITTED)
 public class TaskService implements ITaskService {
 
     @Autowired
     private TaskRepository taskRepository;
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
     public List<Task> findAll() {
 
         List<Task> tasks = taskRepository.findAll();
@@ -26,8 +26,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    public Task findById(Long id) throws Throwable {
+    public Task findById(Long id) throws EntityNotFoundException {
 
         Task task = taskRepository.findById(id)
                         .orElseThrow(() -> {
@@ -36,5 +35,26 @@ public class TaskService implements ITaskService {
                         });
 
         return task;
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
+        try {
+            Task task = findById(id);
+            taskRepository.delete(task);
+
+        }
+        catch (EntityNotFoundException e) {
+            String errorMessage = String.format("Task with id: %s not found", id);
+            throw new EntityNotFoundException(errorMessage);
+        }
+    }
+
+    @Override
+    public Task save(Task task) {
+        Task taskObject = taskRepository.save(task);
+
+        return taskObject;
     }
 }

@@ -10,4 +10,8 @@ public interface ITaskService {
 
     List<Task> findAll();
 
+    void deleteById(Long id);
+
+    Task save(Task task);
+
 }

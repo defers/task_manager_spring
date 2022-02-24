@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.text.Format;
 import java.util.Formatter;
@@ -62,6 +63,14 @@ public class ApplicationUserDetailsService implements UserDetailsService, IUserS
         User userObject = null;
 
         if (id == null) {
+
+            userObject = userRepository.findByUsername(user.getUsername());
+
+            if (userObject != null) {
+                throw new EntityExistsException(String.format("User with username: %s is already exists",
+                        user.getUsername()));
+            }
+
             userObject = userRepository.save(user);
         }
         else {

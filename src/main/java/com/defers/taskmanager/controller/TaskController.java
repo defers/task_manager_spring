@@ -41,5 +41,14 @@ public class TaskController {
 
     }
 
+    @PostMapping("/save")
+    public ResponseEntity<Task> saveTask(@RequestBody @Valid Task task) {
+
+        Task taskObj = taskService.save(task);
+
+        return new ResponseEntity<Task>(taskObj, HttpStatus.CREATED);
+
+    }
+
 
 }
