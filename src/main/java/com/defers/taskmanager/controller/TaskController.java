@@ -32,8 +32,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTask(@PathVariable(name="id") @Valid Long id,
-                                        BindingResult bindingResult) throws Throwable {
+    public ResponseEntity<Task> getTask(@PathVariable(name = "id") @Valid Long id) throws Throwable {
 
         Task task = taskService.findById(id);
 
@@ -50,5 +49,11 @@ public class TaskController {
 
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteTask(@PathVariable(name = "id") Long id) {
+        taskService.deleteById(id);
+
+        return new ResponseEntity<String>(String.format("Task with id: %s has deleted", id), HttpStatus.OK);
+    }
 
 }

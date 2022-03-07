@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "tasks")
@@ -26,11 +27,14 @@ public class Task {
     private String description;
 
     @Column(name = "creation_date")
-    @NotBlank
     private LocalDateTime date;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
 
 }
