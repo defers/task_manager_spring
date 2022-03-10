@@ -1,4 +1,4 @@
-package com.defers.taskmanager.model;
+package com.defers.taskmanager.dto;
 
 import com.defers.taskmanager.entity.User;
 import lombok.AllArgsConstructor;

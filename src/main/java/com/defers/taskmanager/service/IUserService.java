@@ -16,4 +16,5 @@ public interface IUserService {
 
     void delete(Long id) throws EntityNotFoundException;
 
+    User findByUsername(String username);
 }

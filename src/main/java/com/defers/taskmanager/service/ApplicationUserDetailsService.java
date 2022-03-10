@@ -1,10 +1,8 @@
 package com.defers.taskmanager.service;
 
-import com.defers.taskmanager.entity.Task;
 import com.defers.taskmanager.entity.User;
-import com.defers.taskmanager.model.ApplicationUser;
+import com.defers.taskmanager.dto.ApplicationUser;
 import com.defers.taskmanager.repository.UserRepository;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-import java.text.Format;
-import java.util.Formatter;
 import java.util.List;
 
 @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -48,6 +44,13 @@ public class ApplicationUserDetailsService implements UserDetailsService, IUserS
                     return new EntityNotFoundException(
                             String.format("User with id: %s not found", id));
                 });
+
+        return user;
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        User user = userRepository.findByUsername(username);
 
         return user;
     }

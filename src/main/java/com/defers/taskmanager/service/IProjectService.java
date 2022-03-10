@@ -1,5 +1,6 @@
 package com.defers.taskmanager.service;
 
+import com.defers.taskmanager.dto.ProjectDTO;
 import com.defers.taskmanager.entity.Project;
 
 import java.util.List;
@@ -12,4 +13,12 @@ public interface IProjectService {
     void deleteById(Long id);
 
     Project save(Project project);
+
+    ProjectDTO convertFromProjectToDTO(Project project);
+
+    Project convertFromDTOToProject(ProjectDTO projectDTO);
+
+    ProjectDTO saveFromDTO(ProjectDTO projectDTO);
+
+    List<ProjectDTO> findAllProjectsDTO();
 }

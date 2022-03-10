@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Set;
@@ -23,8 +24,12 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-//    @JsonIgnore
+    @JsonIgnore
     private String password;
+
+    @Email
+    @Column
+    private String email;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(

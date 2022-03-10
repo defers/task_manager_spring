@@ -1,5 +1,6 @@
 package com.defers.taskmanager.controller;
 
+import com.defers.taskmanager.dto.TaskDTO;
 import com.defers.taskmanager.entity.Task;
 import com.defers.taskmanager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,29 +24,29 @@ public class TaskController {
     TaskService taskService;
 
     @GetMapping()
-    public ResponseEntity<List<Task>> getAllTasks() {
+    public ResponseEntity<List<TaskDTO>> getAllTasks() {
 
-        List<Task> tasks = taskService.findAll();
+        List<TaskDTO> tasks = taskService.findAllTasksDTO();
 
-        return new ResponseEntity<List<Task>>(tasks, HttpStatus.OK);
+        return new ResponseEntity<List<TaskDTO>>(tasks, HttpStatus.OK);
 
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTask(@PathVariable(name = "id") @Valid Long id) throws Throwable {
+    public ResponseEntity<TaskDTO> getTask(@PathVariable(name = "id") @Valid Long id) throws Throwable {
 
-        Task task = taskService.findById(id);
+        TaskDTO task = taskService.findTaskDTOById(id);
 
-        return new ResponseEntity<Task>(task, HttpStatus.OK);
+        return new ResponseEntity<>(task, HttpStatus.OK);
 
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Task> saveTask(@RequestBody @Valid Task task) {
+    public ResponseEntity<TaskDTO> saveTask(@RequestBody @Valid TaskDTO task) {
 
-        Task taskObj = taskService.save(task);
+        TaskDTO taskObj = taskService.saveFromDTO(task);
 
-        return new ResponseEntity<Task>(taskObj, HttpStatus.CREATED);
+        return new ResponseEntity<TaskDTO>(taskObj, HttpStatus.CREATED);
 
     }
 
