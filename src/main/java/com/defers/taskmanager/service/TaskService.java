@@ -103,6 +103,13 @@ public class TaskService implements ITaskService {
         User user = task.getUser();
         if (user != null) {
             taskDTO.setUserId(user.getId());
+            taskDTO.setUserName(user.getUsername());
+        }
+
+        User performer = task.getPerformer();
+        if (performer != null) {
+            taskDTO.setPerformerId(performer.getId());
+            taskDTO.setPerformerName(performer.getUsername());
         }
 
         Project project = task.getProject();
@@ -112,7 +119,6 @@ public class TaskService implements ITaskService {
         }
 
         return taskDTO;
-
     }
 
     @Override
@@ -127,10 +133,16 @@ public class TaskService implements ITaskService {
         task.setDescription(taskDTO.getDescription());
         task.setDate(taskDTO.getDate());
 
-        Long userId = taskDTO.getUserId();
-        if (userId != null) {
-            User user = userService.findById(userId);
+        String userName = taskDTO.getUserName();
+        if (userName != null) {
+            User user = userService.findByUsername(userName);
             task.setUser(user);
+        }
+
+        String performerName = taskDTO.getPerformerName();
+        if (performerName != null) {
+            User performer = userService.findByUsername(performerName);
+            task.setPerformer(performer);
         }
 
         Long projectId = taskDTO.getProjectId();

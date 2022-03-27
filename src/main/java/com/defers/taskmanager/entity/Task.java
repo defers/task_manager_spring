@@ -34,6 +34,10 @@ public class Task {
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "performer_id")
+    private User performer;
+
+    @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
 

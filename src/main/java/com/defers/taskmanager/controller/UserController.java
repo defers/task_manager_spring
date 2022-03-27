@@ -1,5 +1,6 @@
 package com.defers.taskmanager.controller;
 
+import com.defers.taskmanager.dto.UserDTO;
 import com.defers.taskmanager.entity.User;
 import com.defers.taskmanager.service.ApplicationUserDetailsService;
 import com.defers.taskmanager.service.IUserService;
@@ -20,9 +21,9 @@ public class UserController {
     IUserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
 
-        List<User> users = userService.findAll();
+        List<UserDTO> users = userService.findAllUsersDTO();
 
         return ResponseEntity.ok().body(users);
 
@@ -38,11 +39,11 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
+    public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO user) {
 
-        User newUser = userService.saveOrUpdate(null, user);
+        UserDTO userObject = userService.saveFromDTO(user);
 
-        return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
+        return new ResponseEntity<>(userObject, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -50,7 +51,7 @@ public class UserController {
 
         userService.delete(id);
 
-        return new ResponseEntity<String>(String.format("User with id: %s has deleted", id), HttpStatus.OK);
+        return new ResponseEntity<>(String.format("User with id: %s has deleted", id), HttpStatus.OK);
     }
 
 

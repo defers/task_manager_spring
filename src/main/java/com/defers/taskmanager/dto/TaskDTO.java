@@ -23,8 +23,14 @@ public class TaskDTO {
 
     private Long userId;
 
+    private Long performerId;
+
     private Long projectId;
 
-    private String ProjectName;
+    private String projectName;
+
+    private String userName;
+
+    private String performerName;
 
 }

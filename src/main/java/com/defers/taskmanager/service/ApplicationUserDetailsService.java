@@ -1,13 +1,18 @@
 package com.defers.taskmanager.service;
 
+import com.defers.taskmanager.dto.ProjectDTO;
+import com.defers.taskmanager.dto.UserDTO;
+import com.defers.taskmanager.entity.Project;
 import com.defers.taskmanager.entity.User;
 import com.defers.taskmanager.dto.ApplicationUser;
 import com.defers.taskmanager.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional(isolation = Isolation.READ_COMMITTED)
 @Slf4j
@@ -23,6 +29,8 @@ public class ApplicationUserDetailsService implements UserDetailsService, IUserS
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -51,7 +59,6 @@ public class ApplicationUserDetailsService implements UserDetailsService, IUserS
     @Override
     public User findByUsername(String username) {
         User user = userRepository.findByUsername(username);
-
         return user;
     }
 
@@ -82,6 +89,7 @@ public class ApplicationUserDetailsService implements UserDetailsService, IUserS
                 userObject.setPassword(user.getPassword());
                 userObject.setUsername(user.getUsername());
                 userObject.setRoles(user.getRoles());
+                userObject.setEmail(user.getEmail());
 
                 userRepository.save(userObject);
 
@@ -103,6 +111,74 @@ public class ApplicationUserDetailsService implements UserDetailsService, IUserS
             userRepository.delete(user);
         }
 
+    }
+
+    @Override
+    public UserDTO convertFromUserToDTO(User user) {
+        if (user == null) {
+            throw new RuntimeException("Can't convert NULL to UserDTO");
+        }
+
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(user, userDTO);
+        userDTO.setNewPassword(false);
+        userDTO.setPassword(null);
+
+        return userDTO;
+    }
+
+    @Override
+    public User convertFromDTOToUser(UserDTO userDTO) {
+        if (userDTO == null) {
+            throw new RuntimeException("Can't convert NULL to User");
+        }
+
+        User user = new User();
+
+        String userName = userDTO.getUsername();
+        if (userName != null) {
+            User currentUser = this.findByUsername(userName);
+
+            if (currentUser == null) {
+                user.setUsername(userName);
+                user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            }
+            else{
+                user.setUsername(currentUser.getUsername());
+                user.setId(currentUser.getId());
+                if (userDTO.isNewPassword()) {
+                    user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+                }
+                else {
+                    user.setPassword(currentUser.getPassword());
+                }
+            }
+        }
+
+        user.setEmail(userDTO.getEmail());
+        user.setRoles(userDTO.getRoles());
+
+        return user;
+    }
+
+    @Override
+    public UserDTO saveFromDTO(UserDTO userDTO) {
+        User user = this.convertFromDTOToUser(userDTO);
+        UserDTO userDTOObject = this.convertFromUserToDTO(this.saveOrUpdate(user.getId(), user));
+
+        return userDTOObject;
+    }
+
+    @Override
+    public List<UserDTO> findAllUsersDTO() {
+        List<User> users = this.findAll();
+
+        List<UserDTO> usersDTO = users
+                .stream()
+                .map(user -> this.convertFromUserToDTO(user))
+                .collect(Collectors.toList());
+
+        return usersDTO;
     }
 }
 

@@ -1,5 +1,6 @@
 package com.defers.taskmanager.service;
 
+import com.defers.taskmanager.dto.UserDTO;
 import com.defers.taskmanager.entity.Task;
 import com.defers.taskmanager.entity.User;
 
@@ -17,4 +18,12 @@ public interface IUserService {
     void delete(Long id) throws EntityNotFoundException;
 
     User findByUsername(String username);
+
+    UserDTO convertFromUserToDTO(User user);
+
+    User convertFromDTOToUser(UserDTO userDTO);
+
+    UserDTO saveFromDTO(UserDTO userDTO);
+
+    List<UserDTO> findAllUsersDTO();
 }
